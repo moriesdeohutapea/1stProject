@@ -1,11 +1,9 @@
+// core/src/main/java/com/project/core/di/CoreModules.kt
 package com.project.core.di
 
-import android.content.Context
-import com.project.core.network.NetworkFactory
-import com.project.core.network.UserApi
-import kotlinx.coroutines.Dispatchers
+import com.project.core.domain.repository.UserRepository
+import com.project.core.domain.usecase.GetUsersUseCase
 import org.koin.dsl.module
-import retrofit2.Retrofit
 
 /**
  * Koin module untuk layer :core (Retrofit-based).
@@ -14,22 +12,6 @@ import retrofit2.Retrofit
  * - Bind UserRepository ke implementasinya
  */
 val coreModule = module {
-    single { Dispatchers.IO }
 
-    single {
-        val context: Context = get()
-        NetworkFactory.createOkHttp(
-            context = context, enableDebugInterceptor = true
-        )
-    }
-
-    single<Retrofit> {
-        NetworkFactory.createRetrofit(
-            baseUrl = com.project.core.network.ApiConfig.BASE_URL, client = get()
-        )
-    }
-
-    single<UserApi> {
-        get<Retrofit>().create(UserApi::class.java)
-    }
+    single { GetUsersUseCase(repository = get<UserRepository>()) }
 }

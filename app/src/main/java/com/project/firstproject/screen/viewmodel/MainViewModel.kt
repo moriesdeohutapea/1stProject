@@ -2,7 +2,7 @@ package com.project.firstproject.screen.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.project.core.domain.repository.UserRepository
+import com.project.core.domain.usecase.GetUsersUseCase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +15,7 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 class MainViewModel(
-    private val repo: UserRepository,
+    private val getUsersUseCase: GetUsersUseCase,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(MainState())
@@ -40,7 +40,7 @@ class MainViewModel(
 
             while (attempt < maxRetry && !success) {
                 try {
-                    val users = repo.getUsers()
+                    val users = getUsersUseCase()
                     _state.value = MainState(isLoading = false, data = users)
                     success = true
                 } catch (e: CancellationException) {
