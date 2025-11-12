@@ -24,10 +24,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.project.core.network.Address
-import com.project.core.network.Company
-import com.project.core.network.Geo
-import com.project.core.network.UserResponse
+import com.project.core.domain.model.AddressEntity
+import com.project.core.domain.model.CompanyEntity
+import com.project.core.domain.model.GeoEntity
+import com.project.core.domain.model.UserEntity
 import com.project.firstproject.component.UserItem
 import com.project.firstproject.screen.viewmodel.MainEvent
 import com.project.firstproject.screen.viewmodel.MainViewModel
@@ -93,21 +93,21 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun UserListPreview() {
     val sampleUsers = listOf(
-        UserResponse(
+        UserEntity(
             id = 1,
             name = "Leanne Graham",
             username = "Bret",
             email = "Sincere@april.biz",
-            address = Address(
+            address = AddressEntity(
                 street = "Kulas Light",
                 suite = "Apt. 556",
                 city = "Gwenborough",
                 zipcode = "92998-3874",
-                geo = Geo("-37.3159", "81.1496")
+                geo = GeoEntity("-37.3159", "81.1496")
             ),
             phone = "1-770-736-8031 x56442",
             website = "hildegard.org",
-            company = Company(
+            company = CompanyEntity(
                 name = "Romaguera-Crona",
                 catchPhrase = "Multi-layered client-server neural-net",
                 bs = "harness real-time e-markets"

@@ -1,31 +1,26 @@
+// core/di/NetworkModule.kt
 package com.project.core.di
 
 import android.content.Context
 import com.project.core.network.NetworkFactory
+import com.project.core.network.ApiConfig
 import com.project.core.network.UserApi
-import kotlinx.coroutines.Dispatchers
 import org.koin.dsl.module
 import retrofit2.Retrofit
 
-/**
- * Koin module untuk layer :core (Retrofit-based).
- * - Expose Dispatchers.IO agar testable
- * - Expose OkHttpClient dan Retrofit instance untuk akses API
- * - Bind UserRepository ke implementasinya
- */
-val coreModule = module {
-    single { Dispatchers.IO }
-
+val networkModule = module {
     single {
         val context: Context = get()
         NetworkFactory.createOkHttp(
-            context = context, enableDebugInterceptor = true
+            context = context,
+            enableDebugInterceptor = com.project.core.BuildConfig.DEBUG
         )
     }
 
     single<Retrofit> {
         NetworkFactory.createRetrofit(
-            baseUrl = com.project.core.network.ApiConfig.BASE_URL, client = get()
+            baseUrl = ApiConfig.BASE_URL,
+            client = get()
         )
     }
 

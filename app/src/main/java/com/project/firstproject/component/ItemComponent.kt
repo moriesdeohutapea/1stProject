@@ -20,15 +20,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.project.core.network.UserResponse
+import com.project.core.domain.model.UserEntity
 
 /**
  * Komponen item pengguna untuk ditampilkan di daftar (LazyColumn, dsb).
  */
 @Composable
 fun UserItem(
-    user: UserResponse,
-    onClick: (UserResponse) -> Unit = {},
+    user: UserEntity,
+    onClick: (UserEntity) -> Unit = {},
 ) {
     Card(
         modifier = Modifier

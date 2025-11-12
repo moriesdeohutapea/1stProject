@@ -1,7 +1,4 @@
-// 📂 Path: core/src/main/java/com/project/core/network/UserService.kt
-package com.project.core.network
-
-import retrofit2.http.GET
+package com.project.core.network.model
 
 data class Geo(
     val lat: String,
@@ -32,12 +29,3 @@ data class UserResponse(
     val website: String,
     val company: Company,
 )
-
-interface UserService {
-    @GET(PATH_USERS)
-    suspend fun getUsers(): List<UserResponse>
-
-    companion object {
-        const val PATH_USERS = "users"
-    }
-}

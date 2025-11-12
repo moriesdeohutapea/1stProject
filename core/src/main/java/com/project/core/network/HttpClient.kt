@@ -1,3 +1,4 @@
+// core/src/main/java/com/project/core/network/HttpClient.kt
 package com.project.core.network
 
 import android.content.Context
@@ -43,7 +44,4 @@ object NetworkFactory {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-
-    inline fun <reified T> createService(retrofit: Retrofit): T =
-        retrofit.create(T::class.java)
 }
