@@ -2,7 +2,6 @@ package com.project.firstproject.screen.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.project.core.network.UserResponse
 import com.project.core.repo.UserRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
@@ -19,17 +18,19 @@ class MainViewModel(
     private val repo: UserRepository,
 ) : ViewModel() {
 
-    data class State(
-        val isLoading: Boolean = false,
-        val data: List<UserResponse> = emptyList(),
-        val error: String? = null,
-    )
+    private val _state = MutableStateFlow(MainState())
+    val state: StateFlow<MainState> = _state.asStateFlow()
 
-    private val _state = MutableStateFlow(State())
-    val state: StateFlow<State> = _state.asStateFlow()
+    fun onEvent(event: MainEvent) {
+        when (event) {
+            MainEvent.Refresh,
+            MainEvent.Retry,
+                -> fetchUsers(force = true)
+        }
+    }
 
-    fun fetchUsers() {
-        if (_state.value.isLoading) return
+    fun fetchUsers(force: Boolean = false) {
+        if (_state.value.isLoading && !force) return
         _state.value = _state.value.copy(isLoading = true, error = null)
 
         viewModelScope.launch {
@@ -40,7 +41,7 @@ class MainViewModel(
             while (attempt < maxRetry && !success) {
                 try {
                     val users = repo.getUsers()
-                    _state.value = State(isLoading = false, data = users)
+                    _state.value = MainState(isLoading = false, data = users)
                     success = true
                 } catch (e: CancellationException) {
                     throw e
@@ -72,7 +73,7 @@ class MainViewModel(
     }
 
     private fun handleError(e: Throwable) {
-        _state.value = State(isLoading = false, error = mapErrorMessage(e))
+        _state.value = MainState(isLoading = false, error = mapErrorMessage(e))
     }
 
     private fun mapErrorMessage(t: Throwable): String {
