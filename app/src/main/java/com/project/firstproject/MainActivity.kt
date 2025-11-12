@@ -12,9 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
@@ -51,20 +48,22 @@ class MainActivity : ComponentActivity() {
                 }
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val pullState = rememberPullRefreshState(
-                        refreshing = state.isLoading, onRefresh = { viewModel.onEvent(MainEvent.Refresh) })
                     Box(
-                        modifier = Modifier.fillMaxSize().padding(innerPadding).pullRefresh(pullState)
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
                     ) {
                         when {
                             state.isLoading -> Box(
-                                modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
                             ) {
                                 CircularProgressIndicator()
                             }
 
                             state.error != null -> Box(
-                                modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
                             ) {
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                     Text(text = state.error ?: "Terjadi kesalahan")
@@ -83,11 +82,6 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         }
-                        PullRefreshIndicator(
-                            refreshing = state.isLoading,
-                            state = pullState,
-                            modifier = Modifier.align(Alignment.TopCenter)
-                        )
                     }
                 }
             }

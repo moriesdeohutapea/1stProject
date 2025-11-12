@@ -43,7 +43,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // Compose + Lifecycle
-    implementation(libs.androidx.compose.material.pull.refresh)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
