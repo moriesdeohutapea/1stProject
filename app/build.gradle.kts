@@ -23,6 +23,18 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+    applicationVariants.all {
+        outputs.all {
+            val variant = this
+            val appName = "FirstProject"
+            val versionName = versionName
+            val versionCode = variant.versionCode
+
+            (this as com.android.build.gradle.internal.api.BaseVariantOutputImpl).outputFileName =
+                "${appName}_v${versionName}_(${versionCode})_${variant.name}.apk"
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
