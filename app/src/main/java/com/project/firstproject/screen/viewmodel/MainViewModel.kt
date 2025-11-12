@@ -29,7 +29,7 @@ class MainViewModel(
         }
     }
 
-    fun fetchUsers(force: Boolean = false) {
+    private fun fetchUsers(force: Boolean = false) {
         if (_state.value.isLoading && !force) return
         _state.value = _state.value.copy(isLoading = true, error = null)
 

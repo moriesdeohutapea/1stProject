@@ -12,6 +12,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
@@ -48,39 +51,43 @@ class MainActivity : ComponentActivity() {
                 }
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    when {
-                        state.isLoading -> Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(innerPadding),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator()
-                        }
+                    val pullState = rememberPullRefreshState(
+                        refreshing = state.isLoading, onRefresh = { viewModel.onEvent(MainEvent.Refresh) })
+                    Box(
+                        modifier = Modifier.fillMaxSize().padding(innerPadding).pullRefresh(pullState)
+                    ) {
+                        when {
+                            state.isLoading -> Box(
+                                modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator()
+                            }
 
-                        state.error != null -> Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(innerPadding), contentAlignment = Alignment.Center
-                        ) {
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text(text = state.error ?: "Terjadi kesalahan")
-                                Spacer(modifier = Modifier.height(12.dp))
-                                Button(onClick = { viewModel.onEvent(MainEvent.Retry) }) {
-                                    Text("Coba Lagi")
+                            state.error != null -> Box(
+                                modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+                            ) {
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Text(text = state.error ?: "Terjadi kesalahan")
+                                    Spacer(modifier = Modifier.height(12.dp))
+                                    Button(onClick = { viewModel.onEvent(MainEvent.Retry) }) {
+                                        Text("Coba Lagi")
+                                    }
+                                }
+                            }
+
+                            else -> LazyColumn(
+                                modifier = Modifier.fillMaxSize()
+                            ) {
+                                items(state.data) { user ->
+                                    UserItem(user = user)
                                 }
                             }
                         }
-
-                        else -> LazyColumn(
-                            modifier = Modifier
-                                .padding(innerPadding)
-                                .fillMaxSize()
-                        ) {
-                            items(state.data) { user ->
-                                UserItem(user = user)
-                            }
-                        }
+                        PullRefreshIndicator(
+                            refreshing = state.isLoading,
+                            state = pullState,
+                            modifier = Modifier.align(Alignment.TopCenter)
+                        )
                     }
                 }
             }
