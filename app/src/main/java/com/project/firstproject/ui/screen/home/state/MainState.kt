@@ -1,4 +1,4 @@
-package com.project.firstproject.screen.viewmodel
+package com.project.firstproject.ui.screen.home.state
 
 import com.project.core.domain.model.UserEntity
 
