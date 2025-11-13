@@ -5,12 +5,15 @@ import androidx.navigation.navArgument
 
 sealed class Screen(val route: String) {
 
-    data object UserList : Screen(Routes.USER_LIST)
+    // List user (Home)
+    data object UserList : Screen(Routes.USER_LIST.route)
 
-    data object UserDetail : Screen("${Routes.USER_DETAIL}/{userId}") {
-        const val routeWithArgs = "${Routes.USER_DETAIL}/{userId}"
+    // Detail user
+    data object UserDetail : Screen("${Routes.USER_DETAIL.route}/{userId}") {
 
-        fun createRoute(userId: String): String = "${Routes.USER_DETAIL}/$userId"
+        val routeWithArgs = "${Routes.USER_DETAIL.route}/{userId}"
+
+        fun createRoute(userId: String): String = "${Routes.USER_DETAIL.route}/$userId"
 
         val navArguments = listOf(
             navArgument("userId") { type = NavType.StringType })

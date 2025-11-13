@@ -3,12 +3,17 @@ package com.project.firstproject.ui.screen.home.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.core.domain.usecase.GetUsersUseCase
+import com.project.firstproject.ui.navigation.NavigationEvent
+import com.project.firstproject.ui.navigation.Screen
 import com.project.firstproject.ui.screen.home.event.MainEvent
 import com.project.firstproject.ui.screen.home.state.MainState
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -23,11 +28,24 @@ class MainViewModel(
     private val _state = MutableStateFlow(MainState())
     val state: StateFlow<MainState> = _state.asStateFlow()
 
+    private val _navigationEvent = MutableSharedFlow<NavigationEvent>()
+    val navigationEvent: SharedFlow<NavigationEvent> = _navigationEvent.asSharedFlow()
+
     fun onEvent(event: MainEvent) {
         when (event) {
             MainEvent.Refresh,
             MainEvent.Retry,
                 -> fetchUsers(force = true)
+
+            is MainEvent.NavigateToDetail -> {
+                viewModelScope.launch {
+                    _navigationEvent.emit(
+                        NavigationEvent.NavigateTo(
+                            Screen.UserDetail.createRoute(event.userEntity.id.toString())
+                        )
+                    )
+                }
+            }
         }
     }
 

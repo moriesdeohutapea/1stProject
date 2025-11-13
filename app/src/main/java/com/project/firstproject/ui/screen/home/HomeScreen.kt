@@ -30,6 +30,7 @@ fun HomeScreen(
     state: MainState,
     innerPadding: PaddingValues,
     action: (MainEvent) -> Unit,
+    onClickItem: (UserEntity) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -59,7 +60,10 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(state.data) { user ->
-                    UserItem(user = user)
+                    UserItem(
+                        user = user,
+                        onClick = { onClickItem(user) }
+                    )
                 }
             }
         }
@@ -87,7 +91,10 @@ fun UserListPreview() {
 
     LazyColumn {
         items(sampleUsers) { user ->
-            UserItem(user = user)
+            UserItem(
+                user = user,
+                onClick = {}
+            )
         }
     }
 }

@@ -1,72 +1,123 @@
-// path: ui/screen/detail/DetailActivity.kt
 package com.project.firstproject.ui.screen.detail
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DividerDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.project.firstproject.ui.theme.FirstProjectTheme
+import com.project.core.domain.model.UserEntity
+import com.project.firstproject.utils.DummyUser
 
-class DetailActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+@Composable
+fun DetailScreen(
+    userEntity: UserEntity,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        // Header
+        Column {
+            Text(
+                text = userEntity.name, style = MaterialTheme.typography.headlineMedium
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "@${userEntity.username}",
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        }
 
-        val title = intent.getStringExtra(EXTRA_TITLE) ?: "Detail"
-        val description = intent.getStringExtra(EXTRA_DESCRIPTION) ?: "No description"
-
-        setContent {
-            FirstProjectTheme {
-                DetailScreen(
-                    title = title, description = description
+        // Contact info
+        Card(
+            modifier = Modifier.fillMaxSize(), colors = CardDefaults.cardColors()
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = "Contact", style = MaterialTheme.typography.titleMedium
                 )
+                HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+                InfoRow(label = "Email", value = userEntity.email)
+                InfoRow(label = "Phone", value = userEntity.phone)
+                InfoRow(label = "Website", value = userEntity.website)
+            }
+        }
+
+        // Address
+        Card(
+            modifier = Modifier.fillMaxSize(), colors = CardDefaults.cardColors()
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = "Address", style = MaterialTheme.typography.titleMedium
+                )
+                HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+                val address = userEntity.address
+                InfoRow(label = "Street", value = address.street)
+                InfoRow(label = "Suite", value = address.suite)
+                InfoRow(label = "City", value = address.city)
+                InfoRow(label = "Zipcode", value = address.zipcode)
+            }
+        }
+
+        // Company
+        Card(
+            modifier = Modifier.fillMaxSize(), colors = CardDefaults.cardColors()
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = "Company", style = MaterialTheme.typography.titleMedium
+                )
+                HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+                val company = userEntity.company
+                InfoRow(label = "Name", value = company.name)
+                InfoRow(label = "Tagline", value = company.catchPhrase)
+                InfoRow(label = "Business", value = company.bs)
             }
         }
     }
+}
 
-    companion object {
-        const val EXTRA_TITLE = "extra_title"
-        const val EXTRA_DESCRIPTION = "extra_description"
+@Composable
+private fun InfoRow(
+    label: String,
+    value: String,
+) {
+    Column {
+        Text(
+            text = label, style = MaterialTheme.typography.labelSmall
+        )
+        Text(
+            text = value, style = MaterialTheme.typography.bodyMedium
+        )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DetailScreenPreview() {
-    FirstProjectTheme {
-        DetailScreen(
-            title = "Preview Title", description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-        )
-    }
-}
-
-@Composable
-fun DetailScreen(
-    title: String,
-    description: String,
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Text(
-            text = title, style = MaterialTheme.typography.headlineSmall
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = description, style = MaterialTheme.typography.bodyMedium
-        )
-    }
+    DetailScreen(
+        userEntity = DummyUser.users.first()
+    )
 }
