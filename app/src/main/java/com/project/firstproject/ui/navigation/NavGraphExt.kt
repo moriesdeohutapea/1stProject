@@ -1,4 +1,3 @@
-// path: ui/navigation/NavGraphExt.kt
 package com.project.firstproject.ui.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,6 +7,8 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import com.project.core.domain.model.UserEntity
+import com.project.firstproject.ui.navigation.arg.UserDetailArg
 import com.project.firstproject.ui.screen.detail.DetailScreen
 import com.project.firstproject.ui.screen.home.HomeScreen
 import com.project.firstproject.ui.screen.home.event.MainEvent
@@ -45,17 +46,17 @@ fun NavGraphBuilder.mainNavGraph(
     }
 
     composable(
-        route = Screen.UserDetail.routeWithArgs, arguments = Screen.UserDetail.navArguments
+        route = Screen.UserDetail.route
     ) { backStackEntry ->
-        val userId = backStackEntry.arguments?.getString("userId") ?: return@composable
+        val userEntity: UserEntity? =
+            navController.previousBackStackEntry?.savedStateHandle?.get<UserEntity>(UserDetailArg.User.key)
 
-        val viewModel: MainViewModel = koinViewModel()
-        val state by viewModel.state.collectAsState()
-
-        val user = state.data.firstOrNull { it.id.toString() == userId } ?: return@composable
+        if (userEntity == null) {
+            return@composable
+        }
 
         DetailScreen(
-            userEntity = user
+            userEntity = userEntity
         )
     }
 }

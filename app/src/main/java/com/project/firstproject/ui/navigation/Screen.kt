@@ -1,21 +1,16 @@
 package com.project.firstproject.ui.navigation
 
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import androidx.navigation.NamedNavArgument
 
-sealed class Screen(val route: String) {
+sealed class Screen(
+    val route: String,
+    val routeWithArgs: String = route,
+    val arguments: List<NamedNavArgument> = emptyList(),
+) {
 
     // List user (Home)
     data object UserList : Screen(Routes.USER_LIST.route)
 
-    // Detail user
-    data object UserDetail : Screen("${Routes.USER_DETAIL.route}/{userId}") {
-
-        val routeWithArgs = "${Routes.USER_DETAIL.route}/{userId}"
-
-        fun createRoute(userId: String): String = "${Routes.USER_DETAIL.route}/$userId"
-
-        val navArguments = listOf(
-            navArgument("userId") { type = NavType.StringType })
-    }
+    // Detail user (tanpa argumen di route)
+    data object UserDetail : Screen(Routes.USER_DETAIL.route)
 }

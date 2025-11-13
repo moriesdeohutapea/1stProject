@@ -40,9 +40,7 @@ class MainViewModel(
             is MainEvent.NavigateToDetail -> {
                 viewModelScope.launch {
                     _navigationEvent.emit(
-                        NavigationEvent.NavigateTo(
-                            Screen.UserDetail.createRoute(event.userEntity.id.toString())
-                        )
+                        NavigationEvent.NavigateToDetail(event.userEntity)
                     )
                 }
             }

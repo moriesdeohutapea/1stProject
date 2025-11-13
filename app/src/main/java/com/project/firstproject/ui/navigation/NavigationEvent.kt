@@ -1,5 +1,7 @@
 package com.project.firstproject.ui.navigation
 
+import com.project.core.domain.model.UserEntity
+
 // path: ui/navigation/NavigationEvent.kt
 
 /**
@@ -9,4 +11,5 @@ package com.project.firstproject.ui.navigation
 sealed class NavigationEvent {
     data class NavigateTo(val route: String) : NavigationEvent()
     data object NavigateUp : NavigationEvent()
+    data class NavigateToDetail(val userEntity: UserEntity) : NavigationEvent()
 }

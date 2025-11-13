@@ -4,6 +4,7 @@ package com.project.firstproject.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
+import com.project.firstproject.ui.navigation.arg.UserDetailArg
 
 /**
  * Abstraksi sederhana di atas NavHostController supaya ViewModel
@@ -17,6 +18,11 @@ class Navigator(
         when (event) {
             is NavigationEvent.NavigateTo -> navController.navigate(event.route)
             NavigationEvent.NavigateUp -> navController.navigateUp()
+            is NavigationEvent.NavigateToDetail -> {
+                navController.currentBackStackEntry?.savedStateHandle?.set(UserDetailArg.User.key, event.userEntity)
+
+                navController.navigate(Screen.UserDetail.route)
+            }
         }
     }
 
