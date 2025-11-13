@@ -56,7 +56,10 @@ fun NavGraphBuilder.mainNavGraph(
         }
 
         DetailScreen(
-            userEntity = userEntity
+            userEntity = userEntity,
+            onNavigationClick = {
+                navController.popBackStack()
+            }
         )
     }
 }
