@@ -25,13 +25,11 @@ fun NavGraphBuilder.mainNavGraph(
     composable(Screen.UserList.route) {
         val viewModel: MainViewModel = koinViewModel()
         val state by viewModel.state.collectAsState()
+        val navigator = rememberNavigator(navController)
 
         LaunchedEffect(Unit) {
             viewModel.navigationEvent.collect { event ->
-                when (event) {
-                    is NavigationEvent.NavigateTo -> navController.navigate(event.route)
-                    NavigationEvent.NavigateUp -> navController.navigateUp()
-                }
+                navigator.handleEvent(event)
             }
         }
 
