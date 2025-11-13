@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FirstProject">
         <activity
-            android:name="com.project.firstproject.screen.MainActivity"
+            android:name="com.project.firstproject.ui.screen.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.FirstProject">

@@ -1,8 +1,10 @@
-package com.project.firstproject.screen.viewmodel
+package com.project.firstproject.ui.screen.home.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.core.domain.usecase.GetUsersUseCase
+import com.project.firstproject.ui.screen.home.event.MainEvent
+import com.project.firstproject.ui.screen.home.state.MainState
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow

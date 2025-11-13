@@ -1,4 +1,4 @@
-package com.project.firstproject.screen.viewmodel
+package com.project.firstproject.ui.screen.home.event
 
 sealed interface MainEvent {
     data object Refresh : MainEvent
